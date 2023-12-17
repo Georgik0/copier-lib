@@ -95,7 +95,18 @@ func (d *Dispatcher) SetData(
 			return errors.Wrap(err, "[Dispatcher.SetData]")
 		}
 
-		if len(d.storageIdsForData[fileID]) > 0 {
+		wantSkip := false
+		// вместо слайса здесь надо использовать мапу, чтобы исправить O(n) -> O(1)
+		for _, id := range d.storageIdsForData[fileID] {
+			if id == storageID {
+				// значит какая-то часть файла уже попала в это хранилище
+				// и нам не нужно запоминать хранилище повторно
+				wantSkip = true
+				break
+			}
+		}
+
+		if wantSkip {
 			continue
 		}
 
