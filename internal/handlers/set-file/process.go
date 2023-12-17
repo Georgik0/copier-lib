@@ -10,7 +10,6 @@ import (
 	abstract_storage "storage-api/internal/storage/abstract-storage"
 	storage_dispatcher "storage-api/internal/storage/storage-dispatcher"
 
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
 
@@ -36,7 +35,7 @@ func (p *setFileProcessor) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	_, fileHeader, err := r.FormFile("file")
 	if err != nil {
-		make_response.WithError(w, errors.Wrap(err, "[setFiles ServeHTTP]"))
+		make_response.WithError(w, err)
 		return
 	}
 
